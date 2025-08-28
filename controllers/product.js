@@ -1,4 +1,5 @@
 // import the Product model
+const { populate } = require("../models/category");
 const Product = require("../models/product");
 
 async function getProducts(category, page = 1, itemsPerPage = 6) {
@@ -7,6 +8,7 @@ async function getProducts(category, page = 1, itemsPerPage = 6) {
     filter.category = category;
   }
   const products = await Product.find(filter)
+    .populate("category")
     .limit(itemsPerPage)
     .skip((page - 1) * itemsPerPage)
     .sort({ _id: 1 });
