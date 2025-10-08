@@ -1,25 +1,25 @@
-// import the Product model
-const { populate } = require("../models/category");
 const Product = require("../models/product");
 
-async function getProducts(category, page = 1, itemsPerPage = 6) {
+const getProducts = async (category, page = 1, itemsPerPage = 6) => {
+  // create a container for filter
   let filter = {};
   if (category) {
     filter.category = category;
   }
-  const products = await Product.find(filter)
+  // apply the filters
+  return await Product.find(filter)
     .populate("category")
     .limit(itemsPerPage)
     .skip((page - 1) * itemsPerPage)
-    .sort({ _id: 1 });
-  return products;
-}
+    .sort({ _id: -1 });
+};
 
-async function getProduct(id) {
+const getProduct = async (id) => {
   return await Product.findById(id);
-}
+};
 
-async function addProduct(name, description, price, category, image) {
+const addProduct = async (name, description, price, category, image) => {
+  // create new product
   const newProduct = new Product({
     name,
     description,
@@ -27,21 +27,31 @@ async function addProduct(name, description, price, category, image) {
     category,
     image,
   });
+  // save into mongodb
   await newProduct.save();
   return newProduct;
-}
+};
 
-async function updateProduct(id, name, description, price, category, image) {
-  return await Product.findByIdAndUpdate(
+const updateProduct = async (id, name, description, price, category, image) => {
+  const updatedProduct = await Product.findByIdAndUpdate(
     id,
-    { name, description, price, category, image },
-    { new: true }
+    {
+      name,
+      description,
+      price,
+      category,
+      image,
+    },
+    {
+      new: true,
+    }
   );
-}
+  return updatedProduct;
+};
 
-async function deleteProduct(id) {
+const deleteProduct = async (id) => {
   return await Product.findByIdAndDelete(id);
-}
+};
 
 module.exports = {
   getProducts,

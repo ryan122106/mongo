@@ -10,7 +10,7 @@ app.use(cors());
 
 async function connectToMongoDB() {
   try {
-    await mongoose.connect("mongodb://localhost:27017/games");
+    await mongoose.connect(process.env.MONGODB_URL + "/games");
     console.log("MongoDB is connected");
   } catch (error) {
     console.log("Error connecting to MongoDB:", error);
@@ -24,6 +24,7 @@ app.use("/orders", require("./routes/order"));
 app.use("/payment", require("./routes/payment"));
 app.use("/image", require("./routes/image"));
 app.use("/categories", require("./routes/category"));
+app.use("/users", require("./routes/user"));
 
 app.use("/uploads", express.static("uploads"));
 
