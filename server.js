@@ -18,6 +18,7 @@ async function connectToMongoDB() {
 }
 connectToMongoDB();
 
+
 const productRouter = require("./routes/product");
 app.use("/api/products", productRouter);
 app.use("/api/orders", require("./routes/order"));
